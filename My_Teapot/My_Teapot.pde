@@ -59,7 +59,7 @@ float[] ypr = new float[3];
 
 void setup() {
     // 300px square viewport using OpenGL rendering
-    size(100, 100, P3D);
+    size(1000, 1000, P3D);
     s = loadShape("piece.obj");
     gfx = new ToxiclibsSupport(this);
 
@@ -112,9 +112,13 @@ void draw() {
     // different coordinate system orientation assumptions between Processing
     // and InvenSense DMP)
     float[] axis = quat.toAxisAngle();
-    s.rotate(axis[0], -axis[1], axis[3], axis[2]);
+    s.rotateY(-ypr[0]);
+    s.rotateZ(-ypr[1]);
+    s.rotateX(-ypr[2]);
+    
 
     popMatrix();
+    delay(500);
 }
 
 void serialEvent(Serial port) {
@@ -148,6 +152,11 @@ void serialEvent(Serial port) {
                 
                 // set our toxilibs quaternion to new data
                 quat.set(q[0], q[1], q[2], q[3]);
+                
+                ypr[0] = atan2(2*q[1]*q[2] - 2*q[0]*q[3], 2*q[0]*q[0] + 2*q[1]*q[1] - 1);
+                ypr[1] = atan(gravity[0] / sqrt(gravity[1]*gravity[1] + gravity[2]*gravity[2]));
+                ypr[2] = atan(gravity[1] / sqrt(gravity[0]*gravity[0] + gravity[2]*gravity[2]));
+    
 
                 /*
                 // below calculations unnecessary for orientation only using toxilibs
@@ -162,7 +171,7 @@ void serialEvent(Serial port) {
                 euler[1] = -asin(2*q[1]*q[3] + 2*q[0]*q[2]);
                 euler[2] = atan2(2*q[2]*q[3] - 2*q[0]*q[1], 2*q[0]*q[0] + 2*q[3]*q[3] - 1);
     
-                // calculate yaw/pitch/roll angles
+                calculate yaw/pitch/roll angles
                 ypr[0] = atan2(2*q[1]*q[2] - 2*q[0]*q[3], 2*q[0]*q[0] + 2*q[1]*q[1] - 1);
                 ypr[1] = atan(gravity[0] / sqrt(gravity[1]*gravity[1] + gravity[2]*gravity[2]));
                 ypr[2] = atan(gravity[1] / sqrt(gravity[0]*gravity[0] + gravity[2]*gravity[2]));
@@ -172,47 +181,48 @@ void serialEvent(Serial port) {
                 //println("euler:\t" + euler[0]*180.0f/PI + "\t" + euler[1]*180.0f/PI + "\t" + euler[2]*180.0f/PI);
                 //println("ypr:\t" + ypr[0]*180.0f/PI + "\t" + ypr[1]*180.0f/PI + "\t" + ypr[2]*180.0f/PI);
                 */
+                
             }
         }
     }
 }
 
-void drawCylinder(float topRadius, float bottomRadius, float tall, int sides) {
-    float angle = 0;
-    float angleIncrement = TWO_PI / sides;
-    beginShape(QUAD_STRIP);
-    for (int i = 0; i < sides + 1; ++i) {
-        vertex(topRadius*cos(angle), 0, topRadius*sin(angle));
-        vertex(bottomRadius*cos(angle), tall, bottomRadius*sin(angle));
-        angle += angleIncrement;
-    }
-    endShape();
+//void drawCylinder(float topRadius, float bottomRadius, float tall, int sides) {
+//    float angle = 0;
+//    float angleIncrement = TWO_PI / sides;
+//    beginShape(QUAD_STRIP);
+//    for (int i = 0; i < sides + 1; ++i) {
+//        vertex(topRadius*cos(angle), 0, topRadius*sin(angle));
+//        vertex(bottomRadius*cos(angle), tall, bottomRadius*sin(angle));
+//        angle += angleIncrement;
+//    }
+//    endShape();
     
     // If it is not a cone, draw the circular top cap
-    if (topRadius != 0) {
-        angle = 0;
-        beginShape(TRIANGLE_FAN);
+    //if (topRadius != 0) {
+    //    angle = 0;
+    //    beginShape(TRIANGLE_FAN);
         
-        // Center point
-        vertex(0, 0, 0);
-        for (int i = 0; i < sides + 1; i++) {
-            vertex(topRadius * cos(angle), 0, topRadius * sin(angle));
-            angle += angleIncrement;
-        }
-        endShape();
-    }
+    //    // Center point
+    //    vertex(0, 0, 0);
+    //    for (int i = 0; i < sides + 1; i++) {
+    //        vertex(topRadius * cos(angle), 0, topRadius * sin(angle));
+    //        angle += angleIncrement;
+    //    }
+    //    endShape();
+    //}
   
     // If it is not a cone, draw the circular bottom cap
-    if (bottomRadius != 0) {
-        angle = 0;
-        beginShape(TRIANGLE_FAN);
+    //if (bottomRadius != 0) {
+    //    angle = 0;
+    //    beginShape(TRIANGLE_FAN);
     
-        // Center point
-        vertex(0, tall, 0);
-        for (int i = 0; i < sides + 1; i++) {
-            vertex(bottomRadius * cos(angle), tall, bottomRadius * sin(angle));
-            angle += angleIncrement;
-        }
-        endShape();
-    }
-}
+    //    // Center point
+    //    vertex(0, tall, 0);
+    //    for (int i = 0; i < sides + 1; i++) {
+    //        vertex(bottomRadius * cos(angle), tall, bottomRadius * sin(angle));
+    //        angle += angleIncrement;
+    //    }
+    //    endShape();
+    //}
+//}
