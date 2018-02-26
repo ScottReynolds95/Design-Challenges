@@ -28,12 +28,13 @@ float   x_fil;  //Filtered data
 float   y_fil;
 float   z_fil;
 
+PShape s;
  
 void setup()  { 
 //  size(640, 360, P3D); 
   //size(1000, 1000, P3D);
   fullScreen(P3D);
-  
+  s = loadShape("piece.obj");
   noStroke();
   colorMode(RGB, 256); 
  
@@ -45,45 +46,6 @@ void setup()  {
   myPort.clear();
   myPort.bufferUntil(lf);
 } 
-
-void draw_rect_rainbow() {
-  scale(90);
-  beginShape(QUADS);
-
-  fill(0, 1, 1); vertex(-1,  1.5,  0.25);
-  fill(1, 1, 1); vertex( 1,  1.5,  0.25);
-  fill(1, 0, 1); vertex( 1, -1.5,  0.25);
-  fill(0, 0, 1); vertex(-1, -1.5,  0.25);
-
-  fill(1, 1, 1); vertex( 1,  1.5,  0.25);
-  fill(1, 1, 0); vertex( 1,  1.5, -0.25);
-  fill(1, 0, 0); vertex( 1, -1.5, -0.25);
-  fill(1, 0, 1); vertex( 1, -1.5,  0.25);
-
-  fill(1, 1, 0); vertex( 1,  1.5, -0.25);
-  fill(0, 1, 0); vertex(-1,  1.5, -0.25);
-  fill(0, 0, 0); vertex(-1, -1.5, -0.25);
-  fill(1, 0, 0); vertex( 1, -1.5, -0.25);
-
-  fill(0, 1, 0); vertex(-1,  1.5, -0.25);
-  fill(0, 1, 1); vertex(-1,  1.5,  0.25);
-  fill(0, 0, 1); vertex(-1, -1.5,  0.25);
-  fill(0, 0, 0); vertex(-1, -1.5, -0.25);
-
-  fill(0, 1, 0); vertex(-1,  1.5, -0.25);
-  fill(1, 1, 0); vertex( 1,  1.5, -0.25);
-  fill(1, 1, 1); vertex( 1,  1.5,  0.25);
-  fill(0, 1, 1); vertex(-1,  1.5,  0.25);
-
-  fill(0, 0, 0); vertex(-1, -1.5, -0.25);
-  fill(1, 0, 0); vertex( 1, -1.5, -0.25);
-  fill(1, 0, 1); vertex( 1, -1.5,  0.25);
-  fill(0, 0, 1); vertex(-1, -1.5,  0.25);
-
-  endShape();
-  
-  
-}
 
 void draw_rect(int r, int g, int b) {
   scale(90);
@@ -125,6 +87,10 @@ void draw_rect(int r, int g, int b) {
   
 }
 
+void draw_arm() {
+ shape(s, 0, 0);
+}
+
 void draw()  { 
   
   background(0);
@@ -156,7 +122,7 @@ void draw()  {
   translate(5*width/6, height/2, -50);
   rotateX(radians(-x_fil - x_rotation));
   rotateY(radians(-y_fil));
-  draw_rect(93, 175, 83);
+  draw_arm();
   popMatrix();
  
   textSize(24);
